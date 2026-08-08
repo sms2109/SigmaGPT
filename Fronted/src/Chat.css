@@ -1,0 +1,85 @@
+.chats {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    scrollbar-width: thin;
+    scrollbar-color: #666 transparent;
+}
+
+
+/* Chrome / Edge scrollbar */
+
+.chats::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chats::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chats::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 10px;
+}
+
+.chats::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+
+/* User message */
+
+.userDiv {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.userMessage {
+    background-color: #323232;
+
+    padding: 10px 20px;
+
+    border-radius: 14px;
+
+    margin-left: 15rem;
+
+    max-width: 500px;
+
+    width: fit-content;
+
+    overflow-wrap: break-word;
+}
+
+
+/* GPT response */
+
+.gptDiv {
+    text-align: left;
+
+    font-size: 0.9rem;
+
+    width: 100%;
+
+    overflow-wrap: break-word;
+}
+
+
+/* Code blocks */
+
+.hljs {
+    border-radius: 14px !important;
+}
+
+
+/* Preserve formatting */
+
+pre {
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
