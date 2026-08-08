@@ -83,6 +83,8 @@ SigmaGPT/
 ├── .gitignore
 └── README.md
 
+🔄 How It Works
+
 User
   ↓
 React Frontend
