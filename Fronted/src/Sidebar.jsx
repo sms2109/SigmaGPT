@@ -4,7 +4,7 @@ import { MyContext } from "./MyContext.jsx";
 import {v1 as uuidv1} from "uuid";
 
 function Sidebar() {
-    const {allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats} = useContext(MyContext);
+    const {allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats, isSidebarOpen, setIsSidebarOpen} = useContext(MyContext);
 
     const getAllThreads = async () => {
         try {
@@ -29,10 +29,12 @@ function Sidebar() {
         setReply(null);
         setCurrThreadId(uuidv1());
         setPrevChats([]);
+        setIsSidebarOpen(false);
     }
 
     const changeThread = async (newThreadId) => {
         setCurrThreadId(newThreadId);
+        setIsSidebarOpen(false);
 
         try {
             const response = await fetch(`https://sigmagpt-backend-hp3n.onrender.com/api/thread/${newThreadId}`);
@@ -65,12 +67,17 @@ function Sidebar() {
     }
 
     return (
-        <section className="sidebar">
-            <button onClick={createNewChat}>
-                <img src="/blacklogo.png" alt="gpt logo" className="logo"></img>
-                <span><i className="fa-solid fa-pen-to-square"></i></span>
-            </button>
+        <section className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
+            <div className="closeSidebar" onClick={() => setIsSidebarOpen(false)}>
+                <i className="fa-solid fa-xmark"></i>
+            </div>
 
+            <div className="sidebarTop">
+                <button onClick={createNewChat}>
+                    <img src="/blacklogo.png" alt="gpt logo" className="logo"></img>
+                    <span><i className="fa-solid fa-pen-to-square"></i></span>
+                </button>
+            </div>
 
             <ul className="history">
                 {

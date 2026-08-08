@@ -1,12 +1,14 @@
 .chatWindow {
-    background-color: #212121;
+    background-color: var(--bg-main);
     height: 100vh;
     width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
+    overflow: hidden;
 }
 
 /* navbar */
@@ -16,25 +18,48 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    flex-shrink: 0;
 }
 
-.navbar span {
-    margin: 1rem 2rem;
+.navbar .navLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.navbar span.title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+}
+
+.menuBtn {
+    display: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.menuBtn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
 }
 
 .userIconDiv {
-    margin: 1rem 2rem;
+    cursor: pointer;
 }
 
 .userIcon {
-    background-color: #339cff;
-    height: 25px;
-    width: 25px;
+    background: linear-gradient(135deg, var(--accent), #a855f7);
+    height: 30px;
+    width: 30px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    font-size: 0.85rem;
 }
 
 /* chat input */
@@ -44,6 +69,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem 1rem 1rem;
+    flex-shrink: 0;
 }
 
 .inputBox {
@@ -57,69 +84,120 @@
 
 input {
     width: 100%;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 20px;
-    font-size: 0.8rem;
-    border-radius: 14px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0 54px 55px,
-                rgba(0, 0, 0, 0.05) 0 -12px 30px,
-                rgba(0, 0, 0, 0.05) 0 4px 6px,
-                rgba(0, 0, 0, 0.05) 0 12px 3px,
-                rgba(0, 0, 0, 0.05) 0 -3px 5px;
+    border: 1px solid var(--border-soft);
+    background-color: var(--bg-input);
+    padding: 16px 52px 16px 18px;
+    font-size: 0.95rem;
+    border-radius: 16px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 8px 24px;
+}
+
+input::placeholder {
+    color: var(--text-muted);
 }
 
 input:focus {
     outline: none;
+    border-color: var(--accent);
 }
 
 #submit {
     cursor: pointer;
-    height: 35px;
-    width: 35px;
-    font-size: 20px;
+    height: 34px;
+    width: 34px;
+    font-size: 16px;
     position: absolute;
-    right: 15px;
+    right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--accent);
+    border-radius: 50%;
+    color: #fff;
+    transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
-#submit i:hover {
+#submit:hover {
+    background: var(--accent-hover);
+}
+
+#submit:active {
+    transform: scale(0.94);
+}
+
+#submit i {
     color: #fff;
 }
 
 .info {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     padding: 0.5rem;
-    color: #b4b4b4;
+    color: var(--text-muted);
 }
 
 /* dropdown css */
 
 .dropDown {
     position: absolute;
-    top: 4rem;
-    right: 4rem;
-    width: 150px;
-
-    background-color: #323232;
-    padding: 0.3rem 0.5rem;
-    border-radius: 6px;
+    top: 3.5rem;
+    right: 1.5rem;
+    width: 180px;
+    background-color: #2a2a2a;
+    padding: 0.4rem;
+    border-radius: 10px;
     text-align: left;
     z-index: 1000;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border-soft);
 }
 
 .dropDownItem {
-    font-size: 0.9rem;
-    margin: 0.3rem 0rem;
-    padding: 0.5rem 0.2rem;
+    font-size: 0.88rem;
+    margin: 0.15rem 0;
+    padding: 0.55rem 0.6rem;
     cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-
 .dropDownItem:hover {
-    background-color: rgba(180, 180, 180, 0.1);
-    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+    .menuBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar {
+        padding: 0.65rem 1rem;
+    }
+
+    .navbar span.title {
+        font-size: 0.95rem;
+    }
+
+    .chatInput {
+        padding: 0.5rem 0.75rem 0.85rem;
+    }
+
+    input {
+        padding: 14px 48px 14px 14px;
+        font-size: 0.9rem;
+    }
+
+    .dropDown {
+        right: 1rem;
+        width: 160px;
+    }
+
+    .info {
+        font-size: 0.68rem;
+    }
 }

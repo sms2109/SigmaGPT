@@ -12,6 +12,7 @@ function App() {
   const [prevChats, setPrevChats] = useState([]); //stores all chats of curr threads
   const [newChat, setNewChat] = useState(true);
   const [allThreads, setAllThreads] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // mobile drawer state
 
   const providerValues = {
     prompt, setPrompt,
@@ -19,17 +20,22 @@ function App() {
     currThreadId, setCurrThreadId,
     newChat, setNewChat,
     prevChats, setPrevChats,
-    allThreads, setAllThreads
-  }; 
+    allThreads, setAllThreads,
+    isSidebarOpen, setIsSidebarOpen
+  };
 
   return (
     <div className='app'>
       <MyContext.Provider value={providerValues}>
           <Sidebar></Sidebar>
+          <div
+            className={`sidebarOverlay ${isSidebarOpen ? "show" : ""}`}
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
           <ChatWindow></ChatWindow>
         </MyContext.Provider>
     </div>
   )
 }
 
-export default App
+export default App;
