@@ -26,35 +26,10 @@
     flex-shrink: 0;
 }
 
-<<<<<<< HEAD
 .navLeft {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-=======
-.navbar .navLeft {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.navbar span.title {
-    font-weight: 600;
-    font-size: 1.05rem;
-    letter-spacing: 0.2px;
-}
-
-.menuBtn {
-    display: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
-}
-
-.menuBtn:hover {
-    background-color: rgba(255, 255, 255, 0.06);
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
 }
 
 .navbar span.title {
@@ -78,6 +53,8 @@
     cursor: pointer;
     padding: 6px;
     border-radius: 8px;
+    border: none;
+    background: transparent;
 }
 
 .menuBtn:hover {
@@ -93,23 +70,15 @@
 
 .userIcon {
     background: linear-gradient(135deg, var(--accent), #a855f7);
-<<<<<<< HEAD
     height: 34px;
     width: 34px;
-=======
-    height: 30px;
-    width: 30px;
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.85rem;
-<<<<<<< HEAD
     font-weight: 600;
     color: white;
-=======
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
 }
 
 
@@ -236,32 +205,16 @@
 .inputBox input {
     width: 100%;
     border: 1px solid var(--border-soft);
-<<<<<<< HEAD
     background: var(--bg-input);
-=======
-    background-color: var(--bg-input);
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
     padding: 16px 52px 16px 18px;
     font-size: 0.95rem;
     border-radius: 16px;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
     box-shadow: rgba(0, 0, 0, 0.15) 0 8px 24px;
-<<<<<<< HEAD
 }
 
 .inputBox input::placeholder {
     color: var(--text-muted);
-=======
-}
-
-input::placeholder {
-    color: var(--text-muted);
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--accent);
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
 }
 
 .inputBox input:focus {
@@ -284,14 +237,16 @@ input:focus {
     font-size: 16px;
     position: absolute;
     right: 10px;
-<<<<<<< HEAD
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--accent);
     border-radius: 50%;
     color: #fff;
-    transition: background-color 0.15s ease, transform 0.1s ease;
+    border: none;
+    transition:
+        background-color 0.15s ease,
+        transform 0.1s ease;
 }
 
 #submit:hover {
@@ -316,122 +271,25 @@ input:focus {
 
 .loaderContainer {
     height: 30px;
-=======
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--accent);
-    border-radius: 50%;
-    color: #fff;
-    transition: background-color 0.15s ease, transform 0.1s ease;
 }
 
-<<<<<<< HEAD
 
-/* Info */
-=======
-#submit:hover {
-    background: var(--accent-hover);
-}
-
-#submit:active {
-    transform: scale(0.94);
-}
-
-#submit i {
-    color: #fff;
-}
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
+/* Information Text */
 
 .info {
     font-size: 0.75rem;
     padding: 0.5rem;
-<<<<<<< HEAD
-    margin: 0.25rem 0 0;
-=======
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
     color: var(--text-muted);
-}
-
-/* =====================================================
-   Guest Login / Signup Button
-===================================================== */
-
-<<<<<<< HEAD
-.guestLoginBtn {
-    border: none;
-    outline: none;
-
-    background: #ffffff;
-    color: #000000;
-
-    padding: 8px 16px;
-
-    border-radius: 20px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-
-.guestLoginBtn:hover {
-    opacity: 0.85;
-}
-
-
-/* =====================================================
-   Navbar Right Side
-===================================================== */
-
-.navRight {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
 }
 
 
 /* Mobile */
 
-=======
-.dropDown {
-    position: absolute;
-    top: 3.5rem;
-    right: 1.5rem;
-    width: 180px;
-    background-color: #2a2a2a;
-    padding: 0.4rem;
-    border-radius: 10px;
-    text-align: left;
-    z-index: 1000;
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.35);
-    border: 1px solid var(--border-soft);
-}
-
-.dropDownItem {
-    font-size: 0.88rem;
-    margin: 0.15rem 0;
-    padding: 0.55rem 0.6rem;
-    cursor: pointer;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.dropDownItem:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-/* ---------- Mobile ---------- */
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
 @media (max-width: 768px) {
+
     .menuBtn {
         display: flex;
         align-items: center;
@@ -450,30 +308,17 @@ input:focus {
         padding: 0.5rem 0.75rem 0.85rem;
     }
 
-<<<<<<< HEAD
     .inputBox input {
-=======
-    input {
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
         padding: 14px 48px 14px 14px;
         font-size: 0.9rem;
     }
 
     .dropDown {
         right: 1rem;
-<<<<<<< HEAD
         width: 220px;
-=======
-        width: 160px;
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
     }
 
     .info {
         font-size: 0.68rem;
     }
-<<<<<<< HEAD
 }
-
-=======
-}
->>>>>>> 28773877b7b7bfc6676f5168b83b16ebcfa428c8
