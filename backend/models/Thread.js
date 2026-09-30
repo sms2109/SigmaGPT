@@ -22,6 +22,16 @@ const ThreadSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  // OWNER OF THE THREAD
+  userId: {
+    // MongoDB ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    // Connect Thread with User model.
+    ref: "User", 
+    required: true,
+    // Makes user-based searches faster.
+    index: true,
+  },
   title: {
     type: String,
     default: "New Chat",

@@ -2,6 +2,7 @@ import express from "express"
 import Thread from "../models/Thread.js";
 import { Content } from "openai/resources/skills/content.js";
 import getGeminiResponse from "../utils/genai.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,9 +23,9 @@ router.post("/test",async(req,res)=>{
 });
 
 //Get all threads
-router.get("/thread",async(req,res)=>{
+router.get("/thread",authMiddleware,async(req,res)=>{
     try{
-        const threads = await Thread.find({}).sort({updatedAt : -1});
+        const threads = await Thread.find({userId : req.user.userId}).sort({updatedAt : -1});
         //descending order of updatedAt...most recent data on top
         res.json(threads);
     }catch(err){
@@ -33,10 +34,13 @@ router.get("/thread",async(req,res)=>{
     }
 })
 
-router.get("/thread/:threadId",async(req,res)=>{
+router.get("/thread/:threadId",authMiddleware,async(req,res)=>{
     const {threadId} = req.params;
     try{
-        const thread = await Thread.findOne({threadId});
+        const thread = await Thread.findOne({
+            threadId,
+            userId:req.user.userId,
+        });
 
         if(!thread){
             res.status(404).json({error:"Thread not found"});
@@ -49,10 +53,13 @@ router.get("/thread/:threadId",async(req,res)=>{
     }
 });
 
-router.delete("/thread/:threadId",async(req,res)=>{
+router.delete("/thread/:threadId",authMiddleware,async(req,res)=>{
     const {threadId} = req.params;
     try{
-       const deletedThread =  await Thread.findOneAndDelete({threadId});
+       const deletedThread =  await Thread.findOneAndDelete({
+        threadId,
+        userId:req.user.userId,
+       });
 
        if(!deletedThread){
         res.status(404).json({error: "Thread could not be deleted or not found"});
@@ -65,18 +72,69 @@ router.delete("/thread/:threadId",async(req,res)=>{
     }
 });
 
-router.post("/chat",async(req,res)=>{
+
+// GUEST CHAT
+//
+// Guest user can:
+// - Send a message
+// - Get Gemini response
+//
+// Guest user CANNOT:
+// - Create a database thread
+// - Save messages
+// - See chat in Sidebar
+
+router.post("/guest-chat", async (req, res) => {
+
+    try {
+
+        const { message } = req.body;
+
+        // Check if message exists
+        if (!message || !message.trim()) {
+            return res.status(400).json({
+                message: "Message is required"
+            });
+        }
+
+        console.log("Guest message:", message);
+
+        // Send message to Gemini
+        const assistantReply = await getGeminiResponse(message);
+
+        // IMPORTANT:
+        // We do NOT save anything in MongoDB.
+
+        return res.status(200).json({
+            reply: assistantReply
+        });
+
+    } catch (error) {
+
+        console.error("Guest chat error:", error);
+
+        return res.status(500).json({
+            message: "Failed to generate response"
+        });
+    }
+});
+
+router.post("/chat",authMiddleware,async(req,res)=>{
     const {threadId,message} = req.body;
 
     if(!threadId || !message){
         res.status(400).json({error : "missing required fields"});
     }
     try{
-        let thread = await Thread.findOne({threadId});
+        let thread = await Thread.findOne({
+            threadId,
+            userId:req.user.userId,
+        });
         if(!thread){
             //create a new thread
             thread = new Thread({
                 threadId,
+                userId:req.user.userId,
                 title : message,
                 messages:[{role:"user",content:message}]
             });
