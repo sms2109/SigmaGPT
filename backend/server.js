@@ -19,25 +19,32 @@ const PORT =
     process.env.PORT || 8080;
 
 
-// ===============================
 // MIDDLEWARE
-// ===============================
 
-app.use(
-    cors({
-        origin: "http://localhost:5173",
-        credentials: true
-    })
-);
+import cors from "cors";
+
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://sigmagpt-ibug.onrender.com"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
+}));
 
 app.use(express.json());
 
 app.use(cookieParser());
 
-
-// ===============================
 // ROUTES
-// ===============================
+
 
 app.use("/api", chatRoutes);
 
@@ -47,9 +54,8 @@ app.use(
 );
 
 
-// ===============================
+
 // DATABASE
-// ===============================
 
 const connectDB = async () => {
 
@@ -74,9 +80,7 @@ const connectDB = async () => {
 };
 
 
-// ===============================
 // SERVER
-// ===============================
 
 app.listen(
     PORT,
