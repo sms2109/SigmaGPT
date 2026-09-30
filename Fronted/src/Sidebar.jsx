@@ -13,30 +13,7 @@ import { apiFetch } from "./api.js";
 /* Sidebar */
 
 function Sidebar() {
-
-    const {
-        // Auth
-        user,
-        setUser,
-
-        // Threads
-        allThreads,
-        setAllThreads,
-        currThreadId,
-        setNewChat,
-        setPrompt,
-        setReply,
-        setCurrThreadId,
-        setPrevChats,
-
-        // Mobile Sidebar
-        isSidebarOpen,
-        setIsSidebarOpen,
-
-    } = useContext(MyContext);
-
-
-    /* Get All Threads */
+    const {allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats} = useContext(MyContext);
 
     const getAllThreads = async () => {
 
@@ -93,19 +70,13 @@ function Sidebar() {
 
         // Clear previous messages
         setPrevChats([]);
-
-        // Close mobile sidebar
-        setIsSidebarOpen(false);
-
-    };
-
-
-    /* Change Thread */
+    }
 
     const changeThread = async (newThreadId) => {
 
         // Set selected thread
         setCurrThreadId(newThreadId);
+        setIsSidebarOpen(false);
 
         // Close mobile sidebar
         setIsSidebarOpen(false);
@@ -229,52 +200,12 @@ function Sidebar() {
     /* JSX */
 
     return (
+        <section className="sidebar">
+            <button onClick={createNewChat}>
+                <img src="/blacklogo.png" alt="gpt logo" className="logo"></img>
+                <span><i className="fa-solid fa-pen-to-square"></i></span>
+            </button>
 
-        <section
-            className={`sidebar ${
-                isSidebarOpen ? "open" : ""
-            }`}
-        >
-
-            {/* Close Mobile Sidebar */}
-
-            <div
-                className="closeSidebar"
-                onClick={() =>
-                    setIsSidebarOpen(false)
-                }
-            >
-
-                <i className="fa-solid fa-xmark"></i>
-
-            </div>
-
-
-            {/* New Chat Button */}
-
-            <div className="sidebarTop">
-
-                <button
-                    onClick={createNewChat}
-                    title="New Chat"
-                >
-
-                    <img
-                        src="/blacklogo.png"
-                        alt="SigmaGPT"
-                        className="logo"
-                    />
-
-                    <span>
-                        <i className="fa-solid fa-pen-to-square"></i>
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            {/* Chat History */}
 
             <ul className="history">
 

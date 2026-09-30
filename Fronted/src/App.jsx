@@ -10,18 +10,12 @@ import Auth from "./components/Auth.jsx";
 import { MyContext } from "./MyContext.jsx";
 import { apiFetch } from "./api.js";
 
-
-/* App */
-
 function App() {
-    // Authentication
     const [user, setUser] = useState(null);
     const [checkingAuth, setCheckingAuth] = useState(true);
 
-    // Auth Screen
     const [showAuth, setShowAuth] = useState(false);
 
-    // Chat
     const [prompt, setPrompt] = useState("");
     const [reply, setReply] = useState(null);
     const [currThreadId, setCurrThreadId] = useState(uuidv1());
@@ -29,21 +23,14 @@ function App() {
     const [newChat, setNewChat] = useState(true);
     const [allThreads, setAllThreads] = useState([]);
 
-    // Sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-
-    /* Check Authentication */
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
                 const data = await apiFetch("/api/auth/me");
-
-                // User is logged in
                 setUser(data.user);
             } catch (error) {
-                // User is not logged in
                 setUser(null);
             } finally {
                 setCheckingAuth(false);
@@ -52,9 +39,6 @@ function App() {
 
         checkAuth();
     }, []);
-
-
-    /* Authentication Loading */
 
     if (checkingAuth) {
         return (
@@ -65,9 +49,6 @@ function App() {
         );
     }
 
-
-    /* Login / Signup */
-
     if (!user && showAuth) {
         return (
             <Auth
@@ -75,38 +56,26 @@ function App() {
                     setUser(loggedInUser);
                     setShowAuth(false);
 
-                    // Start fresh authenticated chat
                     setCurrThreadId(uuidv1());
                     setPrevChats([]);
                     setReply(null);
                     setPrompt("");
                     setNewChat(true);
                 }}
-                // Called when user clicks
-                // "Continue as Guest"
                 onBack={() => {
-
-                    // Hide Auth screen
                     setShowAuth(false);
-
                 }}
             />
         );
     }
 
-
-    /* Context Values */
-
     const providerValues = {
-        // Authentication
         user,
         setUser,
 
-        // Auth Screen
         showAuth,
         setShowAuth,
 
-        // Chat
         prompt,
         setPrompt,
         reply,
@@ -120,39 +89,25 @@ function App() {
         allThreads,
         setAllThreads,
 
-        // Sidebar
         isSidebarOpen,
         setIsSidebarOpen,
     };
 
-
-    /* Main Application */
-
     return (
         <div className="app">
             <MyContext.Provider value={providerValues}>
-
-                {/* Sidebar for logged-in users */}
-
                 {user && <Sidebar />}
-
-                {/* Mobile Sidebar Overlay */}
 
                 {user && (
                     <div
                         className={`sidebarOverlay ${
                             isSidebarOpen ? "show" : ""
                         }`}
-                        onClick={() =>
-                            setIsSidebarOpen(false)
-                        }
+                        onClick={() => setIsSidebarOpen(false)}
                     />
                 )}
 
-                {/* Chat available for everyone */}
-
                 <ChatWindow />
-
             </MyContext.Provider>
         </div>
     );

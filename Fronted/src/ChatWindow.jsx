@@ -18,51 +18,7 @@ import { apiFetch } from "./api.js";
 ===================================================== */
 
 function ChatWindow() {
-
-    const {
-
-        // =================================================
-        // Authentication
-        // =================================================
-
-        user,
-        setUser,
-
-        // Used to open Login / Signup screen
-        setShowAuth,
-
-
-        // =================================================
-        // Chat
-        // =================================================
-
-        prompt,
-        setPrompt,
-
-        reply,
-        setReply,
-
-        currThreadId,
-
-        setPrevChats,
-
-        setNewChat,
-
-
-        // =================================================
-        // Mobile Sidebar
-        // =================================================
-
-        isSidebarOpen,
-        setIsSidebarOpen,
-
-    } = useContext(MyContext);
-
-
-    /* =====================================================
-       Local State
-    ===================================================== */
-
+    const {prompt, setPrompt, reply, setReply, currThreadId, setPrevChats, setNewChat} = useContext(MyContext);
     const [loading, setLoading] = useState(false);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -281,96 +237,9 @@ function ChatWindow() {
             ================================================= */}
 
             <div className="navbar">
-
-
-                {/* LEFT SIDE */}
-
-                <div className="navLeft">
-
-
-                    {/* =================================================
-                        MOBILE MENU
-
-                        Only show hamburger for logged-in users
-                        because guests don't have Sidebar.
-                    ================================================= */}
-
-                    {user && (
-                        <div
-                            className="menuBtn"
-                            onClick={() =>
-                                setIsSidebarOpen(!isSidebarOpen)
-                            }
-                        >
-                            <i className="fa-solid fa-bars"></i>
-                        </div>
-                    )}
-
-
-                    {/* =================================================
-                        TITLE
-                    ================================================= */}
-
-                    <span className="title">
-
-                        SigmaGPT
-
-                        <i className="fa-solid fa-chevron-down"></i>
-
-                    </span>
-
-                </div>
-
-
-                {/* =================================================
-                    RIGHT SIDE
-                ================================================= */}
-
-                <div className="navRight">
-
-
-                    {/* =================================================
-                        GUEST USER
-
-                        Show Login / Sign Up button
-                    ================================================= */}
-
-                    {!user && (
-
-                        <button
-                            className="guestLoginBtn"
-                            onClick={() => setShowAuth(true)}
-                        >
-                            Login / Sign Up
-                        </button>
-
-                    )}
-
-
-                    {/* =================================================
-                        LOGGED-IN USER
-
-                        Show profile icon
-                    ================================================= */}
-
-                    {user && (
-
-                        <div
-                            className="userIconDiv"
-                            onClick={handleProfileClick}
-                            title="Account"
-                        >
-
-                            <span className="userIcon">
-
-                                {userInitial}
-
-                            </span>
-
-                        </div>
-
-                    )}
-
+                <span>SigmaGPT <i className="fa-solid fa-chevron-down"></i></span>
+                <div className="userIconDiv" onClick={handleProfileClick}>
+                    <span className="userIcon"><i className="fa-solid fa-user"></i></span>
                 </div>
 
             </div>

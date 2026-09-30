@@ -1,10 +1,7 @@
 /* Google Font */
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-
 /* Global Variables */
-
 :root {
     --bg-main: #212121;
     --bg-sidebar: #171717;
@@ -16,9 +13,7 @@
     --border-soft: rgba(255, 255, 255, 0.08);
 }
 
-
 /* Global Reset */
-
 * {
     box-sizing: border-box;
     color: var(--text-main);
@@ -40,9 +35,7 @@ input {
     font-family: inherit;
 }
 
-
 /* Main Application */
-
 .app {
     background: var(--bg-main);
     display: flex;
@@ -52,9 +45,7 @@ input {
     position: relative;
 }
 
-
 /* Auth Loading */
-
 .auth-loading {
     min-height: 100vh;
     width: 100%;
@@ -73,9 +64,7 @@ input {
     font-size: 14px;
 }
 
-
 /* Loading Spinner */
-
 .loading-spinner {
     width: 30px;
     height: 30px;
@@ -91,9 +80,7 @@ input {
     }
 }
 
-
 /* Mobile Sidebar Overlay */
-
 .sidebarOverlay {
     display: none;
 }
@@ -118,3 +105,4 @@ input {
         opacity: 1;
     }
 }
+
