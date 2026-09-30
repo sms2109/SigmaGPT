@@ -1,120 +1,92 @@
 import "./ChatWindow.css";
 
 import Chat from "./Chat.jsx";
+
 import { MyContext } from "./MyContext.jsx";
 
 import {
     useContext,
     useState,
-    useEffect,
+    useEffect
 } from "react";
 
 import { ScaleLoader } from "react-spinners";
+
 import { apiFetch } from "./api.js";
 
-
-/* =====================================================
-   Chat Window
-===================================================== */
-
 function ChatWindow() {
-    const {prompt, setPrompt, reply, setReply, currThreadId, setPrevChats, setNewChat} = useContext(MyContext);
-    const [loading, setLoading] = useState(false);
 
+    const {
+        user,
+        setUser,
+
+        setShowAuth,
+
+        prompt,
+        setPrompt,
+
+        reply,
+        setReply,
+
+        currThreadId,
+
+        setPrevChats,
+        setNewChat,
+
+        isSidebarOpen,
+        setIsSidebarOpen
+    } = useContext(MyContext);
+
+    const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
-
-    /* =====================================================
-       Send Message
-    ===================================================== */
-
+    // Send message
     const getReply = async () => {
 
-        // Don't send empty message
-        if (!prompt.trim()) return;
-
-        // Don't send another request while loading
-        if (loading) return;
-
+        if (!prompt.trim() || loading) {
+            return;
+        }
 
         setLoading(true);
-
         setNewChat(false);
 
+        const currentPrompt = prompt;
 
         try {
-
-            /* =================================================
-               IMPORTANT
-
-               Logged-in user:
-
-               /api/chat
-               ↓
-               Authentication required
-               ↓
-               MongoDB
-               ↓
-               Sidebar
-
-
-               Guest user:
-
-               /api/guest-chat
-               ↓
-               No authentication
-               ↓
-               No MongoDB
-               ↓
-               No Sidebar
-            ================================================= */
-
-
+            // Logged-in user -> /api/chat
+            // Guest user -> /api/guest-chat
             const endpoint = user
                 ? "/api/chat"
                 : "/api/guest-chat";
 
-
-            /* =================================================
-               Request body
-
-               Logged-in:
-               message + threadId
-
-               Guest:
-               message only
-            ================================================= */
-
+            // Logged-in users need threadId.
+            // Guest users only need message.
             const requestBody = user
                 ? {
-                    message: prompt,
-                    threadId: currThreadId,
+                    message: currentPrompt,
+                    threadId: currThreadId
                 }
                 : {
-                    message: prompt,
+                    message: currentPrompt
                 };
 
-
-            const data = await apiFetch(endpoint, {
-                method: "POST",
-
-                body: JSON.stringify(requestBody),
-            });
-
-
-            // Store Gemini response
-            setReply(data.reply);
-
-
+            const response = await apiFetch(
+                endpoint,
+                {
+                    method: "POST",
+                    body: JSON.stringify(
+                        requestBody
+                    )
+                }
+            );
+            setReply(response.reply);
         } catch (error) {
 
-            console.error("Chat request failed:", error);
-
+            console.error("Chat error:", error);
 
             setReply(
                 "Sorry, something went wrong. Please try again."
             );
-
 
         } finally {
 
@@ -122,272 +94,268 @@ function ChatWindow() {
         }
     };
 
-
-    /* =====================================================
-       Update Chat History
-    ===================================================== */
-
+    // Add new response to chat history
     useEffect(() => {
-
-        // Only add chat when we have both:
-        // prompt + reply
 
         if (prompt && reply) {
 
-            setPrevChats((previousChats) => [
+            setPrevChats((prevChats) => [
 
-                ...previousChats,
+                ...prevChats,
 
                 {
                     role: "user",
-                    content: prompt,
+                    content: prompt
                 },
 
                 {
                     role: "assistant",
-                    content: reply,
-                },
+                    content: reply
+                }
 
             ]);
+
+            setPrompt("");
         }
-
-
-        // Clear input after receiving reply
-        setPrompt("");
-
 
     }, [reply]);
 
+    // Profile menu
+    const handleProfileClick = () => {
+        setIsOpen((prev) => !prev);
+    };
 
-    /* =====================================================
-       Logout
-    ===================================================== */
-
-    const logout = async () => {
+    // Logout
+    const handleLogout = async () => {
 
         try {
 
             await apiFetch("/api/auth/logout", {
-                method: "POST",
+                method: "POST"
             });
-
-
-            // Remove logged-in user
-            setUser(null);
-
-
-            // Close profile dropdown
-            setIsOpen(false);
-
 
         } catch (error) {
 
-            console.error("Logout failed:", error);
+            console.error("Logout error:", error);
+
+        } finally {
+
+            setUser(null);
+            setIsOpen(false);
+            setShowAuth(false);
+
+            setPrompt("");
+            setReply(null);
+            setPrevChats([]);
         }
     };
 
+    // First letter of user's name
+    const getInitial = () => {
 
-    /* =====================================================
-       Profile Menu
-    ===================================================== */
-
-    const handleProfileClick = () => {
-
-        setIsOpen((previous) => !previous);
-    };
-
-
-    /* =====================================================
-       Enter Key
-    ===================================================== */
-
-    const handleKeyDown = (e) => {
-
-        if (
-            e.key === "Enter" &&
-            !e.shiftKey
-        ) {
-
-            e.preventDefault();
-
-            getReply();
+        if (!user) {
+            return "U";
         }
+
+        return (
+            user.name?.charAt(0)?.toUpperCase() ||
+            user.email?.charAt(0)?.toUpperCase() ||
+            "U"
+        );
     };
-
-
-    /* =====================================================
-       User Initial
-    ===================================================== */
-
-    const userInitial =
-        user?.name?.charAt(0)?.toUpperCase() || "U";
-
-
-    /* =====================================================
-       JSX
-    ===================================================== */
 
     return (
 
         <div className="chatWindow">
 
-
-            {/* =================================================
-                NAVBAR
-            ================================================= */}
+            {/* Navbar */}
 
             <div className="navbar">
-                <span>SigmaGPT <i className="fa-solid fa-chevron-down"></i></span>
-                <div className="userIconDiv" onClick={handleProfileClick}>
-                    <span className="userIcon"><i className="fa-solid fa-user"></i></span>
+
+                <div className="navLeft">
+
+                    <button
+                        className="menuBtn"
+                        onClick={() =>
+                            setIsSidebarOpen(!isSidebarOpen)
+                        }
+                    >
+                        <i className="fa-solid fa-bars"></i>
+                    </button>
+
+                    <span className="title">
+                        SigmaGPT
+                        <i className="fa-solid fa-chevron-down"></i>
+                    </span>
+
+                </div>
+
+
+                {/* User */}
+
+                <div
+                    className="userIconDiv"
+                    onClick={handleProfileClick}
+                >
+
+                    <span className="userIcon">
+
+                        {user ? getInitial() : (
+                            <i className="fa-solid fa-user"></i>
+                        )}
+
+                    </span>
+
                 </div>
 
             </div>
 
 
-            {/* =================================================
-                PROFILE DROPDOWN
+            {/* Dropdown */}
 
-                Only logged-in users have this.
-            ================================================= */}
-
-            {isOpen && user && (
+            {isOpen && (
 
                 <div className="dropDown">
 
+                    {user ? (
 
-                    {/* USER INFORMATION */}
+                        <>
+                            <div className="dropDownUser">
 
-                    <div className="dropDownUser">
+                                <div className="dropDownAvatar">
+                                    {getInitial()}
+                                </div>
 
+                                <div>
 
-                        <div className="dropDownAvatar">
+                                    <strong>
+                                        {user.name}
+                                    </strong>
 
-                            {userInitial}
+                                    <span>
+                                        {user.email}
+                                    </span>
 
-                        </div>
+                                </div>
 
+                            </div>
 
-                        <div>
+                            <div className="dropdownDivider"></div>
 
-                            <strong>
-                                {user?.name}
-                            </strong>
+                            <button
+                                className="dropDownItem logoutItem"
+                                onClick={handleLogout}
+                            >
 
-                            <span>
-                                {user?.email}
-                            </span>
+                                <i className="fa-solid fa-arrow-right-from-bracket"></i>
 
-                        </div>
+                                Log out
 
-                    </div>
+                            </button>
 
+                        </>
 
-                    <div className="dropdownDivider"></div>
+                    ) : (
 
+                        <button
+                            className="dropDownItem"
+                            onClick={() => {
+                                setShowAuth(true);
+                                setIsOpen(false);
+                            }}
+                        >
 
-                    {/* LOGOUT */}
+                            <i className="fa-solid fa-right-to-bracket"></i>
 
-                    <button
-                        className="dropDownItem logoutItem"
-                        onClick={logout}
-                    >
+                            Login / Sign Up
 
-                        <i className="fa-solid fa-right-from-bracket"></i>
+                        </button>
 
-                        <span>
-                            Log out
-                        </span>
-
-                    </button>
+                    )}
 
                 </div>
+
             )}
 
 
-            {/* =================================================
-                CHAT AREA
-            ================================================= */}
+            {/* Chat */}
 
             <Chat />
 
 
-            {/* =================================================
-                LOADING
-            ================================================= */}
+            {/* Loading */}
 
             <div className="loaderContainer">
 
                 <ScaleLoader
                     color="#ffffff"
                     loading={loading}
+                    height={20}
+                    width={3}
                 />
 
             </div>
 
 
-            {/* =================================================
-                CHAT INPUT
-            ================================================= */}
+            {/* Input */}
 
             <div className="chatInput">
 
-
                 <div className="inputBox">
-
 
                     <input
                         type="text"
-
-                        placeholder={
-                            user
-                                ? "Ask anything"
-                                : "Ask anything without signing in"
-                        }
-
+                        placeholder="Ask anything"
                         value={prompt}
+
+                        disabled={loading}
 
                         onChange={(e) =>
                             setPrompt(e.target.value)
                         }
 
-                        onKeyDown={handleKeyDown}
+                        onKeyDown={(e) => {
 
-                        disabled={loading}
+                            if (
+                                e.key === "Enter" &&
+                                !e.shiftKey
+                            ) {
+
+                                e.preventDefault();
+
+                                getReply();
+                            }
+
+                        }}
                     />
 
-
-                    {/* SEND BUTTON */}
-
-                    <div
+                    <button
                         id="submit"
+
+                        className={
+                            loading || !prompt.trim()
+                                ? "disabledSubmit"
+                                : ""
+                        }
 
                         onClick={getReply}
 
-                        className={
-                            loading
-                                ? "disabledSubmit"
-                                : ""
+                        disabled={
+                            loading ||
+                            !prompt.trim()
                         }
                     >
 
                         <i className="fa-solid fa-paper-plane"></i>
 
-                    </div>
+                    </button>
 
                 </div>
 
-
-                {/* =================================================
-                    INFO TEXT
-                ================================================= */}
-
                 <p className="info">
 
-                    {user
-                        ? "SigmaGPT can make mistakes. Check important info."
-                        : "Guest chats are not saved. Log in to save your conversations."
-                    }
+                    SigmaGPT can make mistakes.
+                    Check important info.
 
                 </p>
 
@@ -396,6 +364,5 @@ function ChatWindow() {
         </div>
     );
 }
-
 
 export default ChatWindow;

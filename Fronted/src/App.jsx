@@ -25,6 +25,7 @@ function App() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    // Check whether the user is already logged in
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -40,6 +41,7 @@ function App() {
         checkAuth();
     }, []);
 
+    // Loading screen
     if (checkingAuth) {
         return (
             <div className="auth-loading">
@@ -49,6 +51,7 @@ function App() {
         );
     }
 
+    // Authentication screen
     if (!user && showAuth) {
         return (
             <Auth
@@ -78,14 +81,19 @@ function App() {
 
         prompt,
         setPrompt,
+
         reply,
         setReply,
+
         currThreadId,
         setCurrThreadId,
+
         newChat,
         setNewChat,
+
         prevChats,
         setPrevChats,
+
         allThreads,
         setAllThreads,
 
@@ -96,6 +104,7 @@ function App() {
     return (
         <div className="app">
             <MyContext.Provider value={providerValues}>
+
                 {user && <Sidebar />}
 
                 {user && (
@@ -108,6 +117,7 @@ function App() {
                 )}
 
                 <ChatWindow />
+
             </MyContext.Provider>
         </div>
     );

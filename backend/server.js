@@ -1,41 +1,92 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import "dotenv/config";
 import mongoose from "mongoose";
-import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.js";
-import chatRoutes from "./routes/chat.js"
 import dns from "dns";
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
+import chatRoutes from "./routes/chat.js";
+import authRoutes from "./routes/auth.js";
+
+dns.setServers([
+    "8.8.8.8",
+    "8.8.4.4"
+]);
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
-app.use(express.json());
+const PORT =
+    process.env.PORT || 8080;
+
+
+// ===============================
+// MIDDLEWARE
+// ===============================
 
 app.use(
     cors({
         origin: "http://localhost:5173",
-        credentials: true,
+        credentials: true
     })
 );
+
+app.use(express.json());
+
 app.use(cookieParser());
 
-app.use("/api/auth",authRoutes);
-app.use("/api",chatRoutes);
+
+// ===============================
+// ROUTES
+// ===============================
+
+app.use("/api", chatRoutes);
+
+app.use(
+    "/api/auth",
+    authRoutes
+);
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
-  connectDB();
-});
+// ===============================
+// DATABASE
+// ===============================
 
-const connectDB = async() => {
-    try{
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log("Connect  with Database!");
-    }catch(err){
-        console.log("Failed to connect with DB",err);
+const connectDB = async () => {
+
+    try {
+
+        await mongoose.connect(
+            process.env.MONGODB_URI
+        );
+
+        console.log(
+            "Connected with Database!"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to connect with DB:",
+            error
+        );
+
     }
-}
+};
+
+
+// ===============================
+// SERVER
+// ===============================
+
+app.listen(
+    PORT,
+    () => {
+
+        console.log(
+            `Server running on ${PORT}`
+        );
+
+        connectDB();
+
+    }
+);

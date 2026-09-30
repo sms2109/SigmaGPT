@@ -1,53 +1,124 @@
-/* Sidebar */
-
 .sidebar {
     background-color: var(--bg-sidebar);
+
     color: var(--text-muted);
+
     height: 100vh;
+
     width: 280px;
+
     min-width: 280px;
+
     display: flex;
+
     flex-direction: column;
+
     justify-content: space-between;
+
+    border-right:
+        1px solid var(--border-soft);
+
+    transition:
+        transform 0.25s ease;
+
+    z-index: 950;
 }
 
 
-button {
+/* Top */
+
+.sidebarTop button {
     display: flex;
+
     justify-content: space-between;
     align-items: center;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: transparent;
-    border: solid 0.5px rgba(255, 255, 255, 0.5);
+
+    width: calc(100% - 20px);
+
+    margin: 12px 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    border:
+        1px solid var(--border-soft);
+
     cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
 }
 
+
+/* Logo */
+
 .logo {
-    height: 25px;
-    width: 25px;
-    background-color: #fff;
+    height: 30px;
+
+    width: 30px;
+
+    background: white;
+
     border-radius: 50%;
+
     object-fit: cover;
 }
 
+
 .sidebarTop button span {
     font-size: 18px;
+
     color: var(--text-muted);
 }
 
-button:hover {
-    background-color: rgba(180, 180, 180, 0.05);
+
+.sidebarTop button:hover {
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    border-color:
+        rgba(255, 255, 255, 0.18);
+}
+
+
+/* Close */
+
+.closeSidebar {
+    display: none;
 }
 
 
 /* History */
 
 .history {
-    margin: 10px;
-    padding: 10px;
+    margin: 4px 10px;
+
+    padding: 6px 0;
+
     height: 100%;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        #555 transparent;
+
+    list-style: none;
+}
+
+.history::-webkit-scrollbar {
+    width: 5px;
+}
+
+.history::-webkit-scrollbar-thumb {
+    background: #555;
+
+    border-radius: 10px;
 }
 
 
@@ -55,50 +126,155 @@ button:hover {
 
 .history li {
     list-style: none;
+
     cursor: pointer;
+
     padding: 9px 12px;
+
     margin-bottom: 4px;
+
     font-size: 14px;
+
     border-radius: 10px;
+
     position: relative;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    padding-right: 28px;
+
+    transition:
+        background-color 0.15s ease;
 }
 
 .history li:hover {
-    background-color: rgba(180, 180, 180, 0.05);
-    border-radius: 10px;
+    background:
+        rgba(255, 255, 255, 0.07);
 }
+
+
+/* Footer */
 
 .sign {
-    padding: 10px;
-    margin: 10px;
-    font-size: 14px;
+    padding: 14px 10px;
+
+    margin:
+        0 10px 10px;
+
+    font-size: 13px;
+
     text-align: center;
-    border-top: solid 0.25px rgba(255, 255, 255, 0.5);
+
+    color: var(--text-muted);
+
+    border-top:
+        1px solid var(--border-soft);
+}
+
+.sign p {
+    margin: 0;
 }
 
 
-/* Delete Icon */
+/* Delete */
 
 .fa-trash {
     opacity: 0;
+
     position: absolute;
+
     right: 10px;
+
     top: 50%;
-    transform: translateY(-50%);
+
+    transform:
+        translateY(-50%);
+
     font-size: 13px;
-    transition: opacity 0.15s ease, color 0.15s ease;
+
+    transition:
+        opacity 0.15s ease,
+        color 0.15s ease;
 }
 
-.history li:hover .fa-trash {
+.history li:hover
+.fa-trash {
     opacity: 1;
+
     color: var(--text-muted);
 }
 
 .fa-trash:hover {
-    color: #f87171 !important;
+    color:
+        #f87171 !important;
 }
 
+
+/* Active */
+
 .highlighted {
-    background-color: rgba(180, 180, 180, 0.05);
-    border-radius: 10px;
+    background:
+        rgba(99, 102, 241, 0.15)
+        !important;
+
+    color: #fff;
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: 78vw;
+
+        max-width: 300px;
+
+        transform:
+            translateX(-100%);
+
+        box-shadow:
+            4px 0 24px
+            rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar.open {
+        transform:
+            translateX(0);
+    }
+
+    .closeSidebar {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        position: absolute;
+
+        top: 14px;
+        right: 14px;
+
+        width: 30px;
+        height: 30px;
+
+        border-radius: 50%;
+
+        background:
+            rgba(255, 255, 255, 0.06);
+
+        cursor: pointer;
+
+        font-size: 14px;
+
+        z-index: 10;
+    }
 }

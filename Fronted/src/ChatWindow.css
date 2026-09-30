@@ -2,15 +2,23 @@
 
 .chatWindow {
     background-color: var(--bg-main);
+
     height: 100vh;
     width: 100%;
+
     min-width: 0;
+
     display: flex;
     flex-direction: column;
+
     justify-content: space-between;
     align-items: center;
+
     text-align: center;
+
     overflow: hidden;
+
+    position: relative;
 }
 
 
@@ -18,29 +26,40 @@
 
 .navbar {
     width: 100%;
+
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
     padding: 0.75rem 1.5rem;
+
     border-bottom: 1px solid var(--border-soft);
+
     flex-shrink: 0;
 }
 
 .navLeft {
     display: flex;
+
     align-items: center;
+
     gap: 0.75rem;
 }
 
 .navbar span.title {
     font-weight: 600;
+
     font-size: 1.05rem;
+
     letter-spacing: 0.2px;
 }
 
 .navbar span.title i {
     margin-left: 4px;
+
     font-size: 10px;
+
     color: #777;
 }
 
@@ -49,12 +68,20 @@
 
 .menuBtn {
     display: none;
+
     font-size: 1.2rem;
+
     cursor: pointer;
+
     padding: 6px;
+
     border-radius: 8px;
+
     border: none;
+
     background: transparent;
+
+    color: white;
 }
 
 .menuBtn:hover {
@@ -69,15 +96,26 @@
 }
 
 .userIcon {
-    background: linear-gradient(135deg, var(--accent), #a855f7);
+    background: linear-gradient(
+        135deg,
+        var(--accent),
+        #a855f7
+    );
+
     height: 34px;
     width: 34px;
+
     border-radius: 50%;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     font-size: 0.85rem;
+
     font-weight: 600;
+
     color: white;
 }
 
@@ -86,67 +124,111 @@
 
 .dropDown {
     position: absolute;
+
     top: 3.6rem;
     right: 1.5rem;
+
     width: 235px;
+
     background: #292929;
+
     padding: 7px;
+
     border-radius: 12px;
+
     text-align: left;
+
     z-index: 1000;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.45);
+
     border: 1px solid var(--border-soft);
 }
 
+
+/* User information */
+
 .dropDownUser {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
+
     padding: 10px 8px;
 }
 
 .dropDownUser > div:last-child {
     min-width: 0;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 3px;
 }
 
 .dropDownUser strong {
     font-size: 13px;
+
     color: #eee;
+
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 }
 
 .dropDownUser span {
     font-size: 11px;
+
     color: #777;
+
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 }
 
+
+/* Dropdown avatar */
+
 .dropDownAvatar {
     flex-shrink: 0;
+
     width: 35px;
     height: 35px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), #a855f7);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            #a855f7
+        );
+
     font-size: 13px;
+
     font-weight: 600;
 }
 
 
-/* Dropdown Divider */
+/* Divider */
 
 .dropdownDivider {
     height: 1px;
+
     margin: 4px 0;
+
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -155,17 +237,29 @@
 
 .dropDownItem {
     width: 100%;
+
     border: none;
+
     background: transparent;
+
     color: #ddd;
+
     font-size: 0.88rem;
+
     margin: 0.15rem 0;
+
     padding: 0.6rem;
+
     cursor: pointer;
+
     border-radius: 8px;
+
     display: flex;
+
     align-items: center;
+
     gap: 0.6rem;
+
     text-align: left;
 }
 
@@ -182,20 +276,31 @@
 
 .chatInput {
     width: 100%;
+
     display: flex;
+
     flex-direction: column;
+
     justify-content: center;
+
     align-items: center;
+
     padding: 0.5rem 1rem 1rem;
+
     flex-shrink: 0;
 }
 
 .inputBox {
     width: 100%;
+
     position: relative;
+
     max-width: 700px;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
 }
 
@@ -204,13 +309,26 @@
 
 .inputBox input {
     width: 100%;
+
     border: 1px solid var(--border-soft);
+
     background: var(--bg-input);
+
     padding: 16px 52px 16px 18px;
+
     font-size: 0.95rem;
+
     border-radius: 16px;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: rgba(0, 0, 0, 0.15) 0 8px 24px;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+
+    box-shadow:
+        rgba(0, 0, 0, 0.15)
+        0 8px 24px;
+
+    color: white;
 }
 
 .inputBox input::placeholder {
@@ -219,11 +337,13 @@
 
 .inputBox input:focus {
     outline: none;
+
     border-color: var(--accent);
 }
 
 .inputBox input:disabled {
     opacity: 0.6;
+
     cursor: not-allowed;
 }
 
@@ -232,18 +352,29 @@
 
 #submit {
     cursor: pointer;
+
     height: 34px;
     width: 34px;
+
     font-size: 16px;
+
     position: absolute;
+
     right: 10px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     background: var(--accent);
+
     border-radius: 50%;
+
     color: #fff;
+
     border: none;
+
     transition:
         background-color 0.15s ease,
         transform 0.1s ease;
@@ -263,6 +394,7 @@
 
 .disabledSubmit {
     opacity: 0.5;
+
     pointer-events: none;
 }
 
@@ -271,7 +403,9 @@
 
 .loaderContainer {
     height: 30px;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
 }
@@ -281,7 +415,9 @@
 
 .info {
     font-size: 0.75rem;
+
     padding: 0.5rem;
+
     color: var(--text-muted);
 }
 
@@ -292,6 +428,7 @@
 
     .menuBtn {
         display: flex;
+
         align-items: center;
         justify-content: center;
     }
@@ -305,16 +442,25 @@
     }
 
     .chatInput {
-        padding: 0.5rem 0.75rem 0.85rem;
+        padding:
+            0.5rem
+            0.75rem
+            0.85rem;
     }
 
     .inputBox input {
-        padding: 14px 48px 14px 14px;
+        padding:
+            14px
+            48px
+            14px
+            14px;
+
         font-size: 0.9rem;
     }
 
     .dropDown {
         right: 1rem;
+
         width: 220px;
     }
 

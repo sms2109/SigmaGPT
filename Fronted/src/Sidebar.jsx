@@ -2,99 +2,105 @@ import "./Sidebar.css";
 
 import {
     useContext,
-    useEffect,
+    useEffect
 } from "react";
 
 import { MyContext } from "./MyContext.jsx";
+
 import { v1 as uuidv1 } from "uuid";
+
 import { apiFetch } from "./api.js";
 
-
-/* Sidebar */
-
 function Sidebar() {
-    const {allThreads, setAllThreads, currThreadId, setNewChat, setPrompt, setReply, setCurrThreadId, setPrevChats} = useContext(MyContext);
 
+    const {
+        allThreads,
+        setAllThreads,
+
+        currThreadId,
+
+        setNewChat,
+        setPrompt,
+        setReply,
+
+        setCurrThreadId,
+        setPrevChats,
+
+        isSidebarOpen,
+        setIsSidebarOpen
+    } = useContext(MyContext);
+
+
+    // Get all threads
     const getAllThreads = async () => {
 
         try {
 
-            const data = await apiFetch("/api/thread");
+            const res = await apiFetch("/api/thread");
 
-            // Filter required thread data
-            const filteredData = data.map((thread) => ({
-                threadId: thread.threadId,
-                title: thread.title,
-            }));
+            const filteredData = res.map(
+                (thread) => ({
+                    threadId: thread.threadId,
+                    title: thread.title
+                })
+            );
 
             setAllThreads(filteredData);
 
         } catch (error) {
 
             console.error(
-                "Failed to fetch threads:",
+                "Failed to load threads:",
                 error
             );
 
         }
-
     };
 
 
-    /* Load Threads */
-
     useEffect(() => {
 
-        if (user) {
-            getAllThreads();
-        }
+        getAllThreads();
 
-    }, [user, currThreadId]);
+    }, [currThreadId]);
 
 
-    /* Create New Chat */
-
+    // Create new chat
     const createNewChat = () => {
 
-        // Start new conversation
         setNewChat(true);
 
-        // Clear input
         setPrompt("");
 
-        // Clear latest reply
         setReply(null);
 
-        // Generate new thread ID
         setCurrThreadId(uuidv1());
 
-        // Clear previous messages
         setPrevChats([]);
-    }
 
-    const changeThread = async (newThreadId) => {
-
-        // Set selected thread
-        setCurrThreadId(newThreadId);
         setIsSidebarOpen(false);
+    };
 
-        // Close mobile sidebar
+
+    // Open existing thread
+    const changeThread = async (
+        newThreadId
+    ) => {
+
+        setCurrThreadId(newThreadId);
+
         setIsSidebarOpen(false);
 
         try {
 
-            // Fetch selected thread
-            const data = await apiFetch(
+            const res = await apiFetch(
                 `/api/thread/${newThreadId}`
             );
 
-            // Load messages
-            setPrevChats(data);
+            setPrevChats(res);
 
-            // No longer a new conversation
             setNewChat(false);
 
-            // Clear latest reply
             setReply(null);
 
         } catch (error) {
@@ -105,33 +111,36 @@ function Sidebar() {
             );
 
         }
-
     };
 
 
-    /* Delete Thread */
-
-    const deleteThread = async (threadId) => {
+    // Delete thread
+    const deleteThread = async (
+        threadId
+    ) => {
 
         try {
 
             await apiFetch(
                 `/api/thread/${threadId}`,
                 {
-                    method: "DELETE",
+                    method: "DELETE"
                 }
             );
 
-            // Remove thread from state
-            setAllThreads((previousThreads) =>
-                previousThreads.filter(
-                    (thread) =>
-                        thread.threadId !== threadId
-                )
+            setAllThreads(
+                (prev) =>
+                    prev.filter(
+                        (thread) =>
+                            thread.threadId !==
+                            threadId
+                    )
             );
 
-            // Create new chat if current thread is deleted
-            if (threadId === currThreadId) {
+            if (
+                threadId === currThreadId
+            ) {
+
                 createNewChat();
             }
 
@@ -143,154 +152,99 @@ function Sidebar() {
             );
 
         }
-
     };
 
-
-    /* Logout */
-
-    const logout = async () => {
-
-        try {
-
-            // Clear authentication cookie
-            await apiFetch(
-                "/api/auth/logout",
-                {
-                    method: "POST",
-                }
-            );
-
-            // Remove user from state
-            setUser(null);
-
-            // Clear chat state
-            setAllThreads([]);
-            setPrevChats([]);
-            setReply(null);
-            setPrompt("");
-
-        } catch (error) {
-
-            console.error(
-                "Logout failed:",
-                error
-            );
-
-        }
-
-    };
-
-
-    /* User Avatar */
-
-    const getInitial = () => {
-
-        if (!user?.name) {
-            return "U";
-        }
-
-        return user.name
-            .charAt(0)
-            .toUpperCase();
-
-    };
-
-
-    /* JSX */
 
     return (
-        <section className="sidebar">
-            <button onClick={createNewChat}>
-                <img src="/blacklogo.png" alt="gpt logo" className="logo"></img>
-                <span><i className="fa-solid fa-pen-to-square"></i></span>
-            </button>
+
+        <section
+            className={`sidebar ${
+                isSidebarOpen
+                    ? "open"
+                    : ""
+            }`}
+        >
+
+            {/* Close button */}
+
+            <div
+                className="closeSidebar"
+                onClick={() =>
+                    setIsSidebarOpen(false)
+                }
+            >
+                <i className="fa-solid fa-xmark"></i>
+            </div>
 
 
-            <ul className="history">
+            {/* New chat */}
 
-                {allThreads?.map((thread) => (
-
-                    <li
-                        key={thread.threadId}
-                        onClick={() =>
-                            changeThread(
-                                thread.threadId
-                            )
-                        }
-                        className={
-                            thread.threadId === currThreadId
-                                ? "highlighted"
-                                : ""
-                        }
-                    >
-
-                        <span className="thread-title">
-                            {thread.title}
-                        </span>
-
-
-                        {/* Delete */}
-
-                        <i
-                            className="fa-solid fa-trash"
-                            onClick={(e) => {
-
-                                // Prevent thread selection
-                                e.stopPropagation();
-
-                                deleteThread(
-                                    thread.threadId
-                                );
-
-                            }}
-                            title="Delete chat"
-                        >
-                        </i>
-
-                    </li>
-
-                ))}
-
-            </ul>
-
-
-            {/* User Section */}
-
-            <div className="sidebarUser">
-
-                <div className="userDetails">
-
-                    <div className="userAvatar">
-                        {getInitial()}
-                    </div>
-
-                    <div className="userText">
-
-                        <strong>
-                            {user?.name}
-                        </strong>
-
-                        <span>
-                            {user?.email}
-                        </span>
-
-                    </div>
-
-                </div>
-
+            <div className="sidebarTop">
 
                 <button
-                    className="logoutButton"
-                    onClick={logout}
-                    title="Logout"
+                    onClick={createNewChat}
                 >
 
-                    <i className="fa-solid fa-right-from-bracket"></i>
+                    <img
+                        src="/SigmaGPTlogo.png"
+                        alt="SigmaGPT"
+                        className="logo"
+                    />
+
+                    <span>
+                        <i className="fa-solid fa-pen-to-square"></i>
+                    </span>
 
                 </button>
 
             </div>
+
+
+            {/* History */}
+
+            <ul className="history">
+
+                {allThreads?.map(
+                    (thread) => (
+
+                        <li
+                            key={thread.threadId}
+
+                            onClick={() =>
+                                changeThread(
+                                    thread.threadId
+                                )
+                            }
+
+                            className={
+                                thread.threadId ===
+                                currThreadId
+                                    ? "highlighted"
+                                    : ""
+                            }
+                        >
+
+                            {thread.title}
+
+                            <i
+                                className="fa-solid fa-trash"
+                                onClick={(e) => {
+
+                                    e.stopPropagation();
+
+                                    deleteThread(
+                                        thread.threadId
+                                    );
+
+                                }}
+                            ></i>
+
+                        </li>
+
+                    )
+                )}
+
+            </ul>
 
 
             {/* Footer */}
@@ -304,10 +258,7 @@ function Sidebar() {
             </div>
 
         </section>
-
     );
-
 }
-
 
 export default Sidebar;
