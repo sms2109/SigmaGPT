@@ -21,8 +21,6 @@ const PORT =
 
 // MIDDLEWARE
 
-import cors from "cors";
-
 const allowedOrigins = [
     "http://localhost:5173",
     "https://sigmagpt-ibug.onrender.com"
